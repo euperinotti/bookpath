@@ -14,8 +14,6 @@ app.Configure(config =>
 {
     config.SetApplicationName("bookpath");
 
-    config.AddCommand<CreateCommand>("create")
-        .WithDescription("Navigate to a bookmark or create a new one.");
     config.AddCommand<ListCommand>("list")
         .WithDescription("List all saved bookmarks.");
     config.AddCommand<UpdateCommand>("update")
