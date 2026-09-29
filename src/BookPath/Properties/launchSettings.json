@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "BookPath Create": {
+      "commandName": "Project",
+      "commandLineArgs": "-n erp -p \"D:\\TP_COOPAVEL\\ERP\""
+    }
+  }
+}
