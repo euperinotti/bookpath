@@ -16,7 +16,7 @@ public sealed class JsonBookmarkRepository : IBookmarkRepository
 
     public JsonBookmarkRepository(string? filePath = null)
     {
-        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         if (string.IsNullOrWhiteSpace(home))
             throw new InvalidOperationException("Could not determine the current user's home directory.");
 
@@ -33,7 +33,7 @@ public sealed class JsonBookmarkRepository : IBookmarkRepository
 
         try
         {
-            var json = File.ReadAllText(_filePath);
+            string json = File.ReadAllText(_filePath);
             if (string.IsNullOrWhiteSpace(json))
                 return Array.Empty<Bookmark>();
 
@@ -54,14 +54,14 @@ public sealed class JsonBookmarkRepository : IBookmarkRepository
 
     public void Save(IEnumerable<Bookmark> bookmarks)
     {
-        var directory = Path.GetDirectoryName(_filePath);
+        string? directory = Path.GetDirectoryName(_filePath);
         if (string.IsNullOrWhiteSpace(directory))
             throw new BookmarkException("Could not determine the bookmark directory.");
 
         Directory.CreateDirectory(directory);
 
-        var json = JsonSerializer.Serialize(bookmarks.OrderBy(x => x.Name), JsonOptions);
-        var temporaryFile = $"{_filePath}.{Guid.NewGuid():N}.tmp";
+        string json = JsonSerializer.Serialize(bookmarks.OrderBy(x => x.Name), JsonOptions);
+        string temporaryFile = $"{_filePath}.{Guid.NewGuid():N}.tmp";
 
         try
         {

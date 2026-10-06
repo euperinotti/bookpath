@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using BookPath.Application;
+using BookPath.Domain;
 using BookPath.Infrastructure;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -53,14 +54,14 @@ public sealed class BookmarkCommand : Command<BookmarkCommand.Settings>
     {
         if (settings.Bookmark is not null)
         {
-            var bookmark = _service.Get(settings.Bookmark);
+            Bookmark bookmark = _service.Get(settings.Bookmark);
 
             // The direct lookup intentionally emits only the path so a shell wrapper can cd to it.
             Console.WriteLine(bookmark.Path);
             return 0;
         }
 
-        var created = _service.Create(settings.Name, settings.Path);
+        Bookmark created = _service.Create(settings.Name, settings.Path);
 
         AnsiConsole.MarkupLine(
             $"[green]Created[/] [bold]{CommandOutput.Escape(created.Name)}[/] -> [grey]{CommandOutput.Escape(created.Path)}[/]");

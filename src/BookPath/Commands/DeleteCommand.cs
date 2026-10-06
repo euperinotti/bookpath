@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using BookPath.Application;
+using BookPath.Domain;
 using BookPath.Infrastructure;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -32,7 +33,7 @@ public sealed class DeleteCommand : Command<DeleteCommand.Settings>
         Settings settings,
         CancellationToken cancellation)
     {
-        var deleted = _service.Delete(settings.BookmarkName);
+        Bookmark deleted = _service.Delete(settings.BookmarkName);
 
         AnsiConsole.MarkupLine(
             $"[green]Deleted[/] bookmark [bold]{CommandOutput.Escape(deleted.Name)}[/].");

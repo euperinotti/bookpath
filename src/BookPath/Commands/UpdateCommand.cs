@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using BookPath.Application;
+using BookPath.Domain;
 using BookPath.Infrastructure;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -48,7 +49,7 @@ public sealed class UpdateCommand : Command<UpdateCommand.Settings>
         Settings settings,
         CancellationToken cancellation)
     {
-        var updated = _service.Update(settings.BookmarkName, settings.Name, settings.Path);
+        Bookmark updated = _service.Update(settings.BookmarkName, settings.Name, settings.Path);
 
         AnsiConsole.MarkupLine(
             $"[green]Updated[/] [bold]{CommandOutput.Escape(updated.Name)}[/] -> [grey]{CommandOutput.Escape(updated.Path)}[/]");

@@ -1,5 +1,7 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using BookPath.Application;
+using BookPath.Domain;
 using BookPath.Infrastructure;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -29,7 +31,12 @@ public sealed class ListCommand : Command<ListCommand.Settings>
         Settings settings,
         CancellationToken cancellation)
     {
-        var bookmarks = _service.List();
+        long fetchedResultsMs = 0;
+        long renderResultsMs = 0;
+
+        Stopwatch sw = Stopwatch.StartNew();
+
+        IReadOnlyList<Bookmark> bookmarks = _service.List();
 
         if (bookmarks.Count == 0)
         {
@@ -37,12 +44,16 @@ public sealed class ListCommand : Command<ListCommand.Settings>
             return 0;
         }
 
-        var table = new Table()
+        fetchedResultsMs = sw.ElapsedMilliseconds;
+
+        sw.Restart();
+
+        Table table = new Table()
             .Border(TableBorder.Rounded)
             .AddColumn("Name")
             .AddColumn("Path");
 
-        foreach (var bookmark in bookmarks)
+        foreach (Bookmark bookmark in bookmarks)
         {
             table.AddRow(
                 CommandOutput.Escape(bookmark.Name),
@@ -50,6 +61,11 @@ public sealed class ListCommand : Command<ListCommand.Settings>
         }
 
         AnsiConsole.Write(table);
+
+        renderResultsMs = sw.ElapsedMilliseconds;
+
+        AnsiConsole.WriteLine($"Fetched results in {fetchedResultsMs} ms");
+        AnsiConsole.WriteLine($"Rendered results in {renderResultsMs} ms");
         return 0;
     }
 }
